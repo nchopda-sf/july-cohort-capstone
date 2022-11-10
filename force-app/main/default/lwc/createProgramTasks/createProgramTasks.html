@@ -1,0 +1,126 @@
+<template>
+    <template if:false={newTrainingTaskModalshown}>
+        <!-- To select Training Tasks-->
+        <template if:true={selectTrainingTasks}>   
+            <div class="slds-modal__header">
+                <h1 class="slds-modal__title">Assign Multiple Training Tasks</h1>
+            </div>
+
+            <div class="slds-modal__content slds-p-around_small">
+                <lightning-input type="search" 
+                                label="Enter Training Tasks Name To Search"
+                                value={searchKey} 
+                                onchange={handelSearchKey}> 
+                </lightning-input>
+                <br/>
+                <lightning-datatable columns={trainingtasksfields}  
+                                                    key-field="Id" 
+                                                    data={trainingtasks}
+                                                    onrowselection={handleSelectedRows}
+                >
+                </lightning-datatable>
+            </div>
+
+            <div class="slds-modal__footer">
+                <lightning-button variant="brand"       
+                                label="Create Training Task"
+                                class="slds-p-around_small"
+                                onclick={newTrainingTaskModal}
+                >
+                </lightning-button>
+                <lightning-button variant="brand"       
+                                label="Next"
+                                class="slds-p-around_small"
+                                disabled={buttonToNext}
+                                onclick={nextButtonHandler}
+                >
+                </lightning-button>
+                <lightning-button label="Close" 
+                                class="slds-p-around_small"
+                                onclick={closeQuickAction}
+                >
+                </lightning-button>
+            </div>
+        </template>
+
+        <!-- To add Days to compelete fields for all selected tasks-->
+        <template if:false={selectTrainingTasks}>
+
+        
+            <div class="slds-modal__header">
+                <h1 class="slds-modal__title">Add Days To Complete Info For Your Selection</h1>
+            </div>
+
+            <div class="slds-modal__content slds-p-around_small">
+                <table>
+                    <thead>
+                        <th>Training Task</th>
+                        <th>Days to Complete</th>
+                    </thead>
+                    <tbody>
+                        <template for:each={selectedTainingTasks} for:item="tasks">
+                            <tr key={tasks.Id}>
+                                <td>{tasks.Name}</td>
+                                <td><lightning-input
+                                    type="number" 
+                                    name="input3" 
+                                    placeholder="Enter Days in Number"
+                                    class="days-to-complete"
+                                    ></lightning-input>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="slds-modal__footer">
+                <lightning-button variant="brand"       
+                                label="Back"
+                                class="slds-p-around_small"
+                                onclick={backButtonHandler}
+                >
+                </lightning-button>
+                <lightning-button variant="brand"       
+                                label="Save"
+                                class="slds-p-around_small"
+                                onclick={saveSelectedTrainingTasks}
+                >
+                </lightning-button>
+            </div>
+        </template>
+    </template>
+
+    <template if:true={newTrainingTaskModalshown}>
+        <div class="slds-modal__header">
+            <h1 class="slds-modal__title">Create New Training Task</h1>
+        </div>
+
+        <div class="slds-modal__content modal_overflow slds-p-around_small">
+            <lightning-record-edit-form
+                object-api-name="Training_Task__c"
+                onsuccess={handleSucessfulInsert}
+            >
+                <lightning-input-field field-name={name}></lightning-input-field>
+                <lightning-input-field field-name={tasktype}></lightning-input-field>
+                <lightning-input-field field-name={tasklength}></lightning-input-field>
+            
+            </lightning-record-edit-form>
+        </div>
+        <div class="slds-modal__footer">
+            <lightning-button variant="brand"
+                            type="submit"
+                            label="Save"
+                            class="slds-p-around_small"
+                            onclick={handleCreateNewTrainingTask}
+            >
+            </lightning-button>
+            <lightning-button label="Close"
+                            class="slds-p-around_small"
+                            onclick={newTrainingTaskModal}
+            >
+            </lightning-button> 
+        </div>
+    </template>
+</template>

@@ -1,0 +1,33 @@
+<template>
+    
+        
+    <div class="slds-modal__header">
+        <h1 class="slds-modal__title">Remove Multiple Training Tasks</h1>
+    </div>
+
+    <div class="slds-modal__content slds-p-around_small">
+        <lightning-datatable columns={trainingtasksfields}  
+                                            key-field="Id" 
+                                            data={trainingtasks}
+                                            onrowselection={handleSelectedRows}
+        >
+        </lightning-datatable>
+    </div>
+
+    <div class="slds-modal__footer">
+        <lightning-button variant="brand"       
+                          label="Remove"
+                          class="slds-p-around_small"
+                          disabled={buttonToRemove}
+                          onclick={removeSelectedTrainingTasks}
+        >
+        </lightning-button>
+        <lightning-button label="Close" 
+                             class="slds-p-around_small"
+                             onclick={closeQuickAction}
+        >
+        </lightning-button>
+    </div>
+       
+   
+</template>

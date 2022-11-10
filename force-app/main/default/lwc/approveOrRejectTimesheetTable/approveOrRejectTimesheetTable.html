@@ -1,0 +1,108 @@
+<template>
+    
+    <!-- This is the button, from where we can pop up the modal -->
+    <lightning-button label="Approve Or Reject Timesheets" onclick={toggleModal}></lightning-button>
+
+
+    <!-- If the value of modelShown = true, then only it will show the ligtning card's data -->
+    <template if:true={modelShown}>
+
+        <!-- -->
+        <section class="slds-modal slds-fade-in-open">
+
+        <!-- To display the related timesheets to the project -->
+       
+            <div class="slds-modal__container">
+                <!-- Adding closing icon to modal-->
+                <div class="slds-modal__close">
+                    <lightning-button-icon icon-name="utility:close"
+                                            onclick={toggleModal}
+                                            variant="bare-inverse"
+                                            size="large">
+
+                    </lightning-button-icon>
+                </div>
+
+                <!-- Modal - Header : It contains the logic of displaying of Heading of modal -->
+                <div class="slds-modal__header">
+                    <h1 class="slds-modal__title">Approve or Reject Timesheets</h1>
+                </div>
+
+                <!-- Modal - Content : It contains the logic of displaying data on poped up modal -->
+                <div class="slds-modal__content modal_overflow slds-p-around_small">
+                    <!-- This template for add new timesheet form-->
+                    <template if:false={isInsertNewTimesheetShown}>
+
+                        <!-- Use of Lightning datatable -->
+                        <lightning-datatable columns={columns}  
+                                             key-field="Id" 
+                                             data={timesheets}
+                                             onrowselection={handleSelectedRows}
+                        >
+                        </lightning-datatable>
+
+                    </template>
+
+                    <!-- It will pop up the form to create timesheet-->
+                    <template if:true={isInsertNewTimesheetShown}>
+                        <lightning-record-edit-form
+                            object-api-name="Time_Sheet__c"
+                            onsuccess={handleSucessfulInsert}
+                        >
+                            <lightning-input-field field-name="Project__c" value={projectid}></lightning-input-field>
+                            <lightning-input-field field-name={statusField}></lightning-input-field>
+                           
+                        </lightning-record-edit-form>
+                    </template>
+
+
+                </div>
+
+                <!-- Modal - Footer : It contains the logic on closing modal on screen -->
+                <div class="slds-modal__footer">
+                    <template if:true={isInsertNewTimesheetShown}>
+                        <lightning-button variant="brand"
+                                        type="submit"
+                                        label="Save"
+                                        onclick={handleCreateNewTimesheet}
+                        >
+                        </lightning-button>
+                    </template>
+
+
+                    <template if:false={isInsertNewTimesheetShown}>
+                        <lightning-button label="Add New Timesheet" 
+                                        variant="brand" 
+                                        class="slds-p-around_small"
+                                        onclick={toggleModalBody}>
+                        </lightning-button>
+                        <lightning-button label="Approve" 
+                                        variant="success" 
+                                        class="slds-p-around_small"
+                                        data-mode="Approved"
+                                        onclick={approveTimesheets}
+                                        disabled={noTimesheetsSelected}>
+                        </lightning-button>
+                        <lightning-button label="Reject" 
+                                        variant="destructive" 
+                                        class="slds-p-around_small"
+                                        data-mode="Rejected"
+                                        onclick={rejectTimesheets}
+                                        disabled={noTimesheetsSelected}>
+                        </lightning-button>
+                        <lightning-button label="Close" 
+                                        class="slds-p-around_small"
+                                        onclick={toggleModal}
+                                        >
+                        </lightning-button> 
+                    </template>  
+                </div>
+               
+            </div>        
+       
+        </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+   
+</template>
